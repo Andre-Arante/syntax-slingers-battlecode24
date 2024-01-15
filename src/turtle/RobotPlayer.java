@@ -1,4 +1,4 @@
-package lectureplayer;
+package turtle;
 
 import java.util.Random;
 
