@@ -5,11 +5,30 @@ import battlecode.common.*;
 public class Setup {
 
     private static final int EXPLORE_ROUNDS = 150;
-    
+    private static boolean t = false;
+
     public static void runSetup(RobotController rc) throws GameActionException {
+        if (!t) {
+          rc.writeSharedArray(3, 0);
+          rc.writeSharedArray(4, 0);
+          rc.writeSharedArray(5, 0);
+          t = !t;
+        }  
 
         if(rc.getRoundNum() < EXPLORE_ROUNDS) {
-            // pickup flag if possible
+
+            /*
+            MapLocation center = new MapLocation(rc.getMapWidth()/2,rc.getMapHeight()/2);
+            MapLocation currentLoc = new MapLocation(rc.getLocation().x, rc.getLocation().y);
+            int distFromCenter = center.distanceSquaredTo(currentLoc);
+
+            if(distFromCenter > rc.readSharedArray(1000)) {
+                rc.writeSharedArray(1000, distFromCenter);
+                rc.writeSharedArray(2000, currentLoc.x);
+                rc.writeSharedArray(3000, currentLoc.y);
+            }
+            */
+
             FlagInfo[] flags = rc.senseNearbyFlags(-1);
             for(FlagInfo flag : flags) {
                 MapLocation flagLoc = flag.getLocation();
@@ -19,14 +38,29 @@ public class Setup {
             }
             
             // If we don't have a flag, explore randomly (search for bread crumbs)
-            if (!rc.hasFlag()) Pathfind.explore(rc);
+            if (!rc.hasFlag()){
+                Pathfind.explore(rc);
+
+                MapLocation center = new MapLocation(rc.getMapWidth()/2,rc.getMapHeight()/2);
+                MapLocation currentLoc = new MapLocation(rc.getLocation().x, rc.getLocation().y);
+                int distFromCenter = center.distanceSquaredTo(currentLoc);
+
+                if(distFromCenter > rc.readSharedArray(3)) {
+                    rc.writeSharedArray(3, distFromCenter);
+                    rc.writeSharedArray(4, currentLoc.x);
+                    rc.writeSharedArray(5, currentLoc.y);
+                    rc.setIndicatorString("holding friendly flag");
+                }
+            }
 
             // If we do have a flag, try to bring it to a corner
             else {
               Pathfind.findCorner(rc);
               rc.setIndicatorString("holding friendly flag");
             }
-        } 
+
+
+        }
         // During turns 175 - 200, try and place a flag (that has hopefully been brought to a corner)
         else if (rc.getRoundNum() < 200) {
 

@@ -9,7 +9,7 @@ import battlecode.common.*;
 public class MainPhase {
     
   public static void runMainPhase(RobotController rc) throws GameActionException {
-
+    rc.setIndicatorString(Integer.toString(rc.readSharedArray(4) + rc.readSharedArray(5)));
 
     // Buy global upgrade (prioritize capturing)
     if (rc.canBuyGlobal(GlobalUpgrade.HEALING)) {
