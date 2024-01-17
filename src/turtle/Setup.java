@@ -5,11 +5,15 @@ import battlecode.common.*;
 public class Setup {
 
     private static final int EXPLORE_ROUNDS = 150;
+    private static boolean t = false;
 
     public static void runSetup(RobotController rc) throws GameActionException {
-        rc.writeSharedArray(3, 0);
-        rc.writeSharedArray(4, 0);
-        rc.writeSharedArray(5, 0);
+        if (!t) {
+          rc.writeSharedArray(3, 0);
+          rc.writeSharedArray(4, 0);
+          rc.writeSharedArray(5, 0);
+          t = !t;
+        }  
 
         if(rc.getRoundNum() < EXPLORE_ROUNDS) {
 
@@ -45,6 +49,7 @@ public class Setup {
                     rc.writeSharedArray(3, distFromCenter);
                     rc.writeSharedArray(4, currentLoc.x);
                     rc.writeSharedArray(5, currentLoc.y);
+                    rc.setIndicatorString("holding friendly flag");
                 }
             }
 

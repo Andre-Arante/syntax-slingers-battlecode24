@@ -50,7 +50,7 @@ public class Pathfind {
     }
 
     public static void placeFlag(RobotController rc) throws GameActionException {
-      MapLocation flag = new MapLocation(rc.readSharedArray(0), rc.readSharedArray(1));
+      MapLocation flag = new MapLocation(rc.readSharedArray(4), rc.readSharedArray(5));
       Direction dir = rc.getLocation().directionTo(flag);
       dir = dir.opposite();
       if (rc.canMove(dir)) rc.move(dir);
