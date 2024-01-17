@@ -65,7 +65,7 @@ public class Pathfind {
           MapLocation corner = new MapLocation(rc.readSharedArray(4),rc.readSharedArray(5));
           dir = rc.getLocation().directionTo(corner);
           moveTowards(rc, corner, true);
-          rc.setIndicatorString("Finding farthest location");
+          rc.setIndicatorString("Finding Farthest Location");
      }
     }
 
