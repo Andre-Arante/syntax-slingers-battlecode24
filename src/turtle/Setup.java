@@ -52,20 +52,25 @@ public class Setup {
             }
           }
 
+          // If there is a nearby flag
           if(targetFlag != null) {
+            // Move towards it
             Pathfind.moveTowards(rc, targetFlag.getLocation(), false);
+
+            // Try to place an explosive trap
             if(rc.getLocation().distanceSquaredTo(flags[0].getLocation()) < 9) {
               if(rc.canBuild(TrapType.EXPLOSIVE, rc.getLocation())) {
                 rc.build(TrapType.EXPLOSIVE, rc.getLocation());
               }
               else {
+                // Also try to dig water if we can't build a trap
                 MapLocation waterLoc = rc.getLocation().add(RobotPlayer.directions[RobotPlayer.random.nextInt(8)]);
                 if(rc.canDig(waterLoc)) rc.dig(waterLoc);
               }
             }
           } 
           else {
-            Pathfind.moveTowards(rc, new MapLocation(rc.readSharedArray(0), rc.readSharedArray(1)), false);
+            Pathfind.explore(rc);
           } 
 
         }
