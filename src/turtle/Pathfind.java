@@ -62,10 +62,10 @@ public class Pathfind {
 
     public static void findCorner(RobotController rc) throws GameActionException {
       if (rc.isMovementReady()) {
-        MapLocation corner = new MapLocation(rc.getMapWidth(), rc.getMapHeight());
-        dir = rc.getLocation().directionTo(corner);
-        moveTowards(rc, corner, true); 
-        rc.setIndicatorString("Finding Corner");
+          MapLocation corner = new MapLocation(rc.readSharedArray(4),rc.readSharedArray(5));
+          dir = rc.getLocation().directionTo(corner);
+          moveTowards(rc, corner, true);
+          rc.setIndicatorString("Finding penis");
      }
     }
 
