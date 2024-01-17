@@ -12,19 +12,24 @@ public class MainPhase {
 
 
     // Buy global upgrade (prioritize capturing)
-    if(rc.canBuyGlobal(GlobalUpgrade.CAPTURING)) {
-      rc.buyGlobal(GlobalUpgrade.CAPTURING);
-    } 
-    else if(rc.canBuyGlobal(GlobalUpgrade.ACTION)) {
+    if (rc.canBuyGlobal(GlobalUpgrade.HEALING)) {
+      rc.buyGlobal(GlobalUpgrade.HEALING);
+    } else if (rc.canBuyGlobal(GlobalUpgrade.ACTION)) {
       rc.buyGlobal(GlobalUpgrade.ACTION);
     }
 
     //attack enemies, prioritizing enemies that have your flag
+    //store enemies into RobotInfo[] array only if they enemies
     RobotInfo[] nearbyEnemies = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
-    for(RobotInfo robot : nearbyEnemies) {
-      if(robot.hasFlag()) {
+    //iterate through these robots
+    for (RobotInfo robot : nearbyEnemies) {
+      if (robot.hasFlag()) {
+        //go to robot if it has flag
         Pathfind.moveTowards(rc, robot.getLocation(), true);
-        if(rc.canAttack(robot.getLocation())) rc.attack(robot.getLocation());
+        //if can attack, attack it
+        if (rc.canAttack(robot.getLocation())) {
+          rc.attack(robot.getLocation());
+        }
       }
     }
 
@@ -32,17 +37,18 @@ public class MainPhase {
     //move towards flags and place defenses around them
     FlagInfo[] flags = rc.senseNearbyFlags(-1);
 
+    //a desired flag
     FlagInfo targetFlag = null;
+
     for(FlagInfo flag : flags) {
+      //if flag isn't picked up we can set out targetFlag to true
       if(!flag.isPickedUp()) {
         targetFlag = flag;
         break;
       }
     }
 
-
     // Place traps and water around flag
-
     if(targetFlag != null) {
       Pathfind.moveTowards(rc, targetFlag.getLocation(), false);
       if(rc.getLocation().distanceSquaredTo(flags[0].getLocation()) < 9) {

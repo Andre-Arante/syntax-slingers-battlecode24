@@ -69,6 +69,8 @@ public class Setup {
           } 
 
         }
+
+        //THIS DOESNT RUN BECAUSE THE TOP CODE RUNS FOR FIRST 200 ROUNDS
         else {
             //try to place flag if it is far enough away from other flags
             if(rc.senseLegalStartingFlagPlacement(rc.getLocation())) {
