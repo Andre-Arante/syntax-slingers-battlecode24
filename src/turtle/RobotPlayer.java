@@ -19,6 +19,7 @@ public class RobotPlayer {
                 Direction.NORTHWEST,
             };
     
+    //entrance point
     public static void run(RobotController rc) throws GameActionException{
         while (true){
             try {
