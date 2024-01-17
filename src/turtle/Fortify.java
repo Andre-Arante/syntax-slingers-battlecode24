@@ -16,7 +16,7 @@ public class Fortify {
         }
 
         if(targetFlag != null) {
-          Pathfind.moveTowards(rc, targetFlag.getLocation(), false);
+          Pathfind.bugNav2(rc, targetFlag.getLocation());
 
           // Only attempt building if we are within the trap radius
           if(rc.getLocation().distanceSquaredTo(flags[0].getLocation()) < 9) {
@@ -29,8 +29,9 @@ public class Fortify {
             }
           }
         } 
+        
         else {
-          Pathfind.moveTowards(rc, new MapLocation(rc.readSharedArray(0), rc.readSharedArray(1)), false);
+          Pathfind.bugNav2(rc, new MapLocation(rc.readSharedArray(0), rc.readSharedArray(1)));
         } 
     }
 

@@ -5,11 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import battlecode.common.*;
-// push success
+
 public class MainPhase {
     
   public static void runMainPhase(RobotController rc) throws GameActionException {
-    rc.setIndicatorString(Integer.toString(rc.readSharedArray(4) + rc.readSharedArray(5)));
 
     // Buy global upgrade (prioritize capturing)
     if(rc.canBuyGlobal(GlobalUpgrade.HEALING)) {
@@ -23,7 +22,7 @@ public class MainPhase {
     RobotInfo[] nearbyEnemies = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
     for(RobotInfo robot : nearbyEnemies) {
       if(robot.hasFlag()) {
-        Pathfind.moveTowards(rc, robot.getLocation(), true);
+        Pathfind.bugNav2(rc, robot.getLocation());
         if(rc.canAttack(robot.getLocation())) rc.attack(robot.getLocation());
       }
     }
@@ -42,7 +41,7 @@ public class MainPhase {
 
     // Place traps and water around flag
     if(targetFlag != null) {
-      Pathfind.moveTowards(rc, targetFlag.getLocation(), false);
+      Pathfind.bugNav2(rc, targetFlag.getLocation());
       if(rc.getLocation().distanceSquaredTo(flags[0].getLocation()) < 9) {
         if(rc.canBuild(TrapType.EXPLOSIVE, rc.getLocation())) {
           rc.build(TrapType.EXPLOSIVE, rc.getLocation());
@@ -54,7 +53,7 @@ public class MainPhase {
       }
     } 
     else {
-      Pathfind.moveTowards(rc, new MapLocation(rc.readSharedArray(0), rc.readSharedArray(1)), false);
+      Pathfind.bugNav2(rc, new MapLocation(rc.readSharedArray(0), rc.readSharedArray(1)));
     } 
 
     for(RobotInfo robot : nearbyEnemies) {
@@ -68,13 +67,13 @@ public class MainPhase {
     }
 
     if(!rc.hasFlag()) {
-      Pathfind.moveTowards(rc, new MapLocation(rc.readSharedArray(0), rc.readSharedArray(1)), false);
+      Pathfind.bugNav2(rc, new MapLocation(rc.readSharedArray(0), rc.readSharedArray(1)));
     }
     else {
       //if we have the flag, move towards the closest ally spawn zone
       MapLocation[] spawnLocs = rc.getAllySpawnLocations();
       MapLocation closestSpawn = findClosestLocation(rc.getLocation(), Arrays.asList(spawnLocs));
-      Pathfind.moveTowards(rc, closestSpawn, true);
+      Pathfind.bugNav2(rc, closestSpawn);
     }
   }
 

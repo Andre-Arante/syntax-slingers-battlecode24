@@ -2,7 +2,6 @@ package turtle;
 
 import java.util.HashSet;
 
-import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
@@ -19,19 +18,23 @@ public class Pathfind {
     private static HashSet<MapLocation> line = null;
     private static int obstacleStartDist = 0;
 
-    public static void moveTowards(RobotController rc, MapLocation loc, boolean fill) throws GameActionException {
-        
-        // move forward if possible, if not, try to go right or left but still towards target
-        Direction dir = rc.getLocation().directionTo(loc);
+    private static int innerRadius = 6;
 
-        if(fill & rc.canFill(rc.getLocation().add(dir))) rc.fill(rc.getLocation().add(dir));
+    public static void lineup(RobotController rc) throws GameActionException {
+        MapLocation loc = rc.getLocation();
+        MapLocation turtle = new MapLocation(rc.readSharedArray(4), rc.readSharedArray(5));
+        Direction dir = rc.getLocation().directionTo(turtle);
 
-        if(rc.canMove(dir)) rc.move(dir);
-        else if(rc.canMove(dir.rotateLeft())) rc.move(dir.rotateLeft());
-        else if(rc.canMove(dir.rotateRight())) rc.move(dir.rotateRight());
+        rc.setIndicatorString(Integer.toString(loc.distanceSquaredTo(turtle)));
+
+            if (loc.distanceSquaredTo(turtle) < innerRadius*innerRadius) {
+            rc.setIndicatorString("Inside inner radius");
+            Pathfind.moveAwayFromFlag(rc);
+        }
+
         else {
-            Direction randDir = RobotPlayer.directions[RobotPlayer.random.nextInt(8)];
-            if(rc.canMove(randDir)) rc.move(randDir);
+            rc.setIndicatorString("Perfect");
+            if (rc.canMove(dir)) rc.move(dir);
         }
     }
 
@@ -39,7 +42,7 @@ public class Pathfind {
         if(rc.isMovementReady()) {
             MapLocation[] crumbLocs = rc.senseNearbyCrumbs(-1);
             if(crumbLocs.length > 0) {
-                moveTowards(rc, crumbLocs[0], false);
+                bugNav2(rc, crumbLocs[0]);
             }
 
             if(dir == null || !rc.canMove(dir)) {
@@ -64,7 +67,7 @@ public class Pathfind {
       if (rc.isMovementReady()) {
           MapLocation corner = new MapLocation(rc.readSharedArray(4),rc.readSharedArray(5));
           dir = rc.getLocation().directionTo(corner);
-          moveTowards(rc, corner, true);
+          bugNav2(rc, corner);
           rc.setIndicatorString("Finding farthest location");
      }
     }
@@ -79,39 +82,6 @@ public class Pathfind {
         closestObstacle = null;
         closestObstacleDist = 10000;
         bugDir = null;
-    }
-
-    public static void bugNavOne(RobotController rc, MapLocation destination) throws GameActionException{
-        if(bugState == 0) {
-            bugDir = rc.getLocation().directionTo(destination);
-            if(rc.canMove(bugDir)){
-                rc.move(bugDir);
-            } else {
-                bugState = 1;
-                closestObstacle = null;
-                closestObstacleDist = 10000;
-            }
-        } else {
-            if(rc.getLocation().equals(closestObstacle)){
-                bugState = 0;
-            }
-
-            if(rc.getLocation().distanceSquaredTo(destination) < closestObstacleDist){
-                closestObstacleDist = rc.getLocation().distanceSquaredTo(destination);
-                closestObstacle = rc.getLocation();
-            }
-
-            for(int i = 0; i < 9; i++){
-                if(rc.canMove(bugDir)){
-                    rc.move(bugDir);
-                    bugDir = bugDir.rotateRight();
-                    bugDir = bugDir.rotateRight();
-                    break;
-                } else {
-                    bugDir = bugDir.rotateLeft();
-                }
-            }
-        }
     }
 
     public static void bugNav2(RobotController rc, MapLocation destination) throws GameActionException{
@@ -144,23 +114,6 @@ public class Pathfind {
                     rc.move(bugDir);
                     bugDir = bugDir.rotateRight();
                     bugDir = bugDir.rotateRight();
-                    break;
-                } else {
-                    bugDir = bugDir.rotateLeft();
-                }
-            }
-        }
-    }
-
-    public static void bugNavZero(RobotController rc, MapLocation destination) throws GameActionException{
-        Direction bugDir = rc.getLocation().directionTo(destination);
-
-        if(rc.canMove(bugDir)){
-            rc.move(bugDir);
-        } else {
-            for(int i = 0; i < 8; i++){
-                if(rc.canMove(bugDir)){
-                    rc.move(bugDir);
                     break;
                 } else {
                     bugDir = bugDir.rotateLeft();

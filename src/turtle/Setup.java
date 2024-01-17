@@ -4,13 +4,9 @@ import battlecode.common.*;
 
 public class Setup {
 
-    private static final int EXPLORE_ROUNDS = 100;
+    private static final int EXPLORE_ROUNDS = 150;
     private static boolean foundCorner = false;
     private static boolean plantedFlag = false;
-
-    private static int innerRadius = 6;
-    private static int outerRadius = 2;
-
 
     public static void runSetup(RobotController rc) throws GameActionException {
       
@@ -74,21 +70,8 @@ public class Setup {
             // If we can't find a spot to place flag, move away from the nearest flag
             if (rc.hasFlag()) Pathfind.moveAwayFromFlag(rc);
 
-            MapLocation loc = rc.getLocation();
-            MapLocation turtle = new MapLocation(rc.readSharedArray(4), rc.readSharedArray(5));
-            Direction dir = rc.getLocation().directionTo(turtle);
-
-            rc.setIndicatorString(Integer.toString(loc.distanceSquaredTo(turtle)));
-
-             if (loc.distanceSquaredTo(turtle) < innerRadius) {
-              rc.setIndicatorString("Inside inner radius");
-              Pathfind.moveAwayFromFlag(rc);
-            }
-
-            else {
-              rc.setIndicatorString("Perfect");
-              if (rc.canMove(dir)) rc.move(dir);
-            }
+            // If we don't have a flag, move to lineup position
+            Pathfind.lineup(rc);
 
             // Fortify.pregameSetup();
           }
