@@ -24,9 +24,16 @@ public class Pathfind {
         // move forward if possible, if not, try to go right or left but still towards target
         Direction dir = rc.getLocation().directionTo(loc);
 
-        if(fill & rc.canFill(rc.getLocation().add(dir))) rc.fill(rc.getLocation().add(dir));
+        //fill water if fill true and can fill one direction up
+        if(fill & rc.canFill(rc.getLocation().add(dir))){
+            rc.fill(rc.getLocation().add(dir));
+        }
 
-        if(rc.canMove(dir)) rc.move(dir);
+        //if can move in desired direction, do it
+        if(rc.canMove(dir)) {
+            rc.move(dir);
+        }
+
         else if(rc.canMove(dir.rotateLeft())) rc.move(dir.rotateLeft());
         else if(rc.canMove(dir.rotateRight())) rc.move(dir.rotateRight());
         else {
