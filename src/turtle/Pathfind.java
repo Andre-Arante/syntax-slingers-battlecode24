@@ -24,16 +24,9 @@ public class Pathfind {
         // move forward if possible, if not, try to go right or left but still towards target
         Direction dir = rc.getLocation().directionTo(loc);
 
-        //fill water if fill true and can fill one direction up
-        if(fill & rc.canFill(rc.getLocation().add(dir))){
-            rc.fill(rc.getLocation().add(dir));
-        }
+        if(fill & rc.canFill(rc.getLocation().add(dir))) rc.fill(rc.getLocation().add(dir));
 
-        //if can move in desired direction, do it
-        if(rc.canMove(dir)) {
-            rc.move(dir);
-        }
-
+        if(rc.canMove(dir)) rc.move(dir);
         else if(rc.canMove(dir.rotateLeft())) rc.move(dir.rotateLeft());
         else if(rc.canMove(dir.rotateRight())) rc.move(dir.rotateRight());
         else {
@@ -56,7 +49,7 @@ public class Pathfind {
         }
     }
 
-    public static void placeFlag(RobotController rc) throws GameActionException {
+    public static void moveAwayFromFlag(RobotController rc) throws GameActionException {
       MapLocation flag = new MapLocation(rc.readSharedArray(4), rc.readSharedArray(5));
       Direction dir = rc.getLocation().directionTo(flag);
       dir = dir.opposite();
