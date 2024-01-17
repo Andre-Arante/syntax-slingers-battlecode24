@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import battlecode.common.*;
-
+// push success
 public class MainPhase {
     
   public static void runMainPhase(RobotController rc) throws GameActionException {
