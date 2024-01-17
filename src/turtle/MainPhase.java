@@ -37,17 +37,19 @@ public class MainPhase {
     // 50/50 Chance of Building either a Water or explosive trap
     Random rand = new Random();
     int chance = rand.nextInt(10);
-    if(rc.canBuild(TrapType.WATER, rc.getLocation()) && chance > 7) {
-      rc.build(TrapType.WATER, rc.getLocation());
-    } else if (rc.canBuild(TrapType.EXPLOSIVE, rc.getLocation())){
+    // if(rc.canBuild(TrapType.WATER, rc.getLocation()) && chance > 7) {
+    //   rc.build(TrapType.WATER, rc.getLocation());
+    // } 
+    
+    if (rc.canBuild(TrapType.EXPLOSIVE, rc.getLocation())){
       rc.build(TrapType.EXPLOSIVE, rc.getLocation());
     }
 
     // If we can't build either just dig
-    else {
-      MapLocation waterLoc = rc.getLocation().add(RobotPlayer.directions[RobotPlayer.random.nextInt(8)]);
-      if(rc.canDig(waterLoc)) rc.dig(waterLoc);
-    }
+    // else {
+    //   MapLocation waterLoc = rc.getLocation().add(RobotPlayer.directions[RobotPlayer.random.nextInt(8)]);
+    //   if(rc.canDig(waterLoc)) rc.dig(waterLoc);
+    // }
 
     //move towards flags and place defenses around them
     MapLocation turtle = new MapLocation(rc.readSharedArray(0), rc.readSharedArray(1));
