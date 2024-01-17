@@ -54,14 +54,9 @@ public class MainPhase {
 
     // Place traps and water around flag
     Pathfind.moveTowards(rc, turtle, false);
-    if(rc.getLocation().distanceSquaredTo(turtle) < 9) {
-      if(rc.canBuild(TrapType.EXPLOSIVE, rc.getLocation())) {
-        rc.build(TrapType.EXPLOSIVE, rc.getLocation());
-      }
-      else {
-        MapLocation waterLoc = rc.getLocation().add(RobotPlayer.directions[RobotPlayer.random.nextInt(8)]);
-        if(rc.canDig(waterLoc)) rc.dig(waterLoc);
-      }
+    if(rc.getLocation().distanceSquaredTo(turtle) > 9 && rc.getLocation().distanceSquaredTo(turtle) < 64) {
+      MapLocation waterLoc = rc.getLocation().add(RobotPlayer.directions[RobotPlayer.random.nextInt(8)]);
+      if(rc.canDig(waterLoc)) rc.dig(waterLoc);
     }
     
     //try to heal friendly robots

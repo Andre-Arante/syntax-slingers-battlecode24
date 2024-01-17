@@ -103,6 +103,12 @@ public class Setup {
                     }
                 }
             } 
+
+            if(rc.getLocation().distanceSquaredTo(flags[0].getLocation()) > 9 && rc.getLocation().distanceSquaredTo(flags[0].getLocation()) < 64) {
+              MapLocation waterLoc = rc.getLocation().add(RobotPlayer.directions[RobotPlayer.random.nextInt(8)]);
+              if(rc.canDig(waterLoc)) rc.dig(waterLoc);
+            }
+
             else Pathfind.explore(rc);
         }
     }
